@@ -380,7 +380,9 @@ input[type="text"],input[type="email"],input[type="password"],select,textarea{mi
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
   transition:opacity .5s ease,visibility .5s ease;
 }
+#splash{pointer-events:none;animation:splashAuto .01s linear 2.5s forwards;}
 #splash.hide{opacity:0;visibility:hidden;}
+@keyframes splashAuto{to{opacity:0;visibility:hidden;}}
 #splash .sp-logo{
   width:96px;height:96px;border-radius:28px;
   background:linear-gradient(135deg,#7c5cfc,#5cfcbc);
@@ -654,9 +656,9 @@ const ADMIN_EMAIL = "azimbekusmonov0919@gmail.com";
 // ═══════════════════════════════════════════════
 // SUPABASE INIT
 // ═══════════════════════════════════════════════
-let supabase = null;
+let sb = null;
 try {
-  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 } catch(e) {
   console.warn('Supabase init failed — localStorage mode');
 }
@@ -760,11 +762,11 @@ function switchAuthTab(tab, btn) {
 
 // Ilova ochilganda sessiyani tekshir
 (async () => {
-  if (supabase) {
-    const { data: { session } } = await supabase.auth.getSession();
+  if (sb) {
+    const { data: { session } } = await sb.auth.getSession();
     if (session?.user) onUserLoggedIn(session.user);
     else showScreen('authScreen');
-    supabase.auth.onAuthStateChange((_event, session) => {
+    sb.auth.onAuthStateChange((_event, session) => {
       if (session?.user) onUserLoggedIn(session.user);
       else if (_event === 'SIGNED_OUT') { currentUser=null; showScreen('authScreen'); }
     });
@@ -785,14 +787,14 @@ function onUserLoggedIn(user) {
 }
 
 async function loadUserProfile(user) {
-  if (supabase) {
+  if (sb) {
     try {
-      const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+      const { data } = await sb.from('profiles').select('*').eq('id', user.id).single();
       if (data) {
         userProfile = { name:data.name, email:data.email, plan:data.plan||'free', streak:data.streak||0, dailyGoal:data.daily_goal||10, dailyDone:data.daily_done||0, lastActive:data.last_active||'' };
       } else {
         userProfile = { name: user.user_metadata?.full_name||user.email?.split('@')[0]||'Foydalanuvchi', email:user.email, plan:'free', streak:0, dailyGoal:10, dailyDone:0, lastActive:'' };
-        await supabase.from('profiles').upsert({ id:user.id, ...userProfile, last_active:userProfile.lastActive, daily_goal:userProfile.dailyGoal, daily_done:userProfile.dailyDone });
+        await sb.from('profiles').upsert({ id:user.id, ...userProfile, last_active:userProfile.lastActive, daily_goal:userProfile.dailyGoal, daily_done:userProfile.dailyDone });
       }
     } catch(e) { fallbackProfile(user); }
   } else { fallbackProfile(user); }
@@ -816,8 +818,8 @@ function updateStreak() {
 
 async function saveUserProfile() {
   localStorage.setItem('az_user_profile', JSON.stringify(userProfile));
-  if (supabase && currentUser) {
-    await supabase.from('profiles').upsert({
+  if (sb && currentUser) {
+    await sb.from('profiles').upsert({
       id:currentUser.id, name:userProfile.name, email:userProfile.email,
       plan:userProfile.plan, streak:userProfile.streak,
       daily_goal:userProfile.dailyGoal, daily_done:userProfile.dailyDone,
@@ -832,8 +834,8 @@ async function doLogin() {
   const errEl = document.getElementById('loginError');
   errEl.style.display='none';
   if (!email||!pass) { showAuthError(errEl,"Email va parolni kiriting"); return; }
-  if (supabase) {
-    const { error } = await supabase.auth.signInWithPassword({ email, password:pass });
+  if (sb) {
+    const { error } = await sb.auth.signInWithPassword({ email, password:pass });
     if (error) {
       const msgs = { 'Invalid login credentials':"Email yoki parol noto'g'ri", 'Email not confirmed':"Emailingizni tasdiqlang" };
       showAuthError(errEl, msgs[error.message]||error.message);
@@ -853,8 +855,8 @@ async function doRegister() {
   errEl.style.display='none';
   if (!name||!email||!pass) { showAuthError(errEl,"Barcha maydonlarni to'ldiring"); return; }
   if (pass.length<6) { showAuthError(errEl,"Parol kamida 6 ta belgi"); return; }
-  if (supabase) {
-    const { error } = await supabase.auth.signUp({ email, password:pass, options:{ data:{ full_name:name } } });
+  if (sb) {
+    const { error } = await sb.auth.signUp({ email, password:pass, options:{ data:{ full_name:name } } });
     if (error) { showAuthError(errEl, error.message==='User already registered'?"Bu email allaqachon ro'yxatdan o'tgan":error.message); }
     else { toast("✅ Ro'yxatdan o'tdingiz! Emailni tasdiqlang.",'ok'); switchAuthTab('login',document.querySelectorAll('.auth-tab')[0]); }
   } else {
@@ -865,16 +867,16 @@ async function doRegister() {
 }
 
 async function doGoogleLogin() {
-  if (!supabase) { toast("Demo rejimda Google kirish yo'q",'err'); return; }
-  const { error } = await supabase.auth.signInWithOAuth({ provider:'google', options:{ redirectTo:window.location.href } });
+  if (!sb) { toast("Demo rejimda Google kirish yo'q",'err'); return; }
+  const { error } = await sb.auth.signInWithOAuth({ provider:'google', options:{ redirectTo:window.location.href } });
   if (error) toast("Xatolik: "+error.message,'err');
 }
 
 async function doResetPassword() {
   const email = document.getElementById('loginEmail').value.trim();
   if (!email) { toast("Avval emailni kiriting",'err'); return; }
-  if (supabase) {
-    const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo:window.location.href });
+  if (sb) {
+    const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo:window.location.href });
     if (error) toast("Xatolik: "+error.message,'err');
     else toast("✅ Parol tiklash emaili yuborildi!",'ok');
   }
@@ -884,7 +886,7 @@ function showAuthError(el, msg) { el.textContent=msg; el.style.display='block'; 
 
 async function doLogout() {
   if (!confirm("Chiqmoqchimisiz?")) return;
-  if (supabase) await supabase.auth.signOut();
+  if (sb) await sb.auth.signOut();
   localStorage.removeItem('az_user');
   currentUser=null; activeLang=null;
   showScreen('authScreen');
@@ -947,9 +949,9 @@ function renderProgressCard() {
 async function renderCurrentAd() {
   if (userProfile.plan === 'premium') return;
   let ad = JSON.parse(localStorage.getItem('az_current_ad')||'null');
-  if (supabase) {
+  if (sb) {
     try {
-      const { data } = await supabase.from('config').select('value').eq('key','ad').maybeSingle();
+      const { data } = await sb.from('config').select('value').eq('key','ad').maybeSingle();
       ad = data?.value || null;
       if (ad) localStorage.setItem('az_current_ad', JSON.stringify(ad));
       else localStorage.removeItem('az_current_ad');
@@ -1079,8 +1081,8 @@ function save() {
   const uid = currentUser.id||currentUser.uid||'local';
   localStorage.setItem(`az_words_${activeLang.id}_${uid}`, JSON.stringify(words));
   localStorage.setItem(`az_stats_${activeLang.id}_${uid}`, JSON.stringify(stats));
-  if (supabase) {
-    supabase.from('user_words').upsert({
+  if (sb) {
+    sb.from('user_words').upsert({
       user_id: uid,
       lang: activeLang.id,
       words: words,
@@ -1220,9 +1222,9 @@ function showAdmin() {
 async function loadAdminData() {
   let usersList = [];
 
-  if (supabase) {
+  if (sb) {
     try {
-      const { data } = await supabase.from('profiles').select('*').order('created_at', {ascending:false}).limit(50);
+      const { data } = await sb.from('profiles').select('*').order('created_at', {ascending:false}).limit(50);
       if (data) usersList = data;
     } catch(e) { console.log('Admin load err:', e); }
   }
@@ -1285,11 +1287,11 @@ function sendAdminNotif() {
 }
 
 async function togglePremiumUser(email) {
-  if (supabase) {
-    const { data } = await supabase.from('profiles').select('id,plan').eq('email', email).single();
+  if (sb) {
+    const { data } = await sb.from('profiles').select('id,plan').eq('email', email).single();
     if (data) {
       const newPlan = data.plan === 'premium' ? 'free' : 'premium';
-      await supabase.from('profiles').update({ plan: newPlan }).eq('email', email);
+      await sb.from('profiles').update({ plan: newPlan }).eq('email', email);
     }
   }
   toast(`✅ ${email} rejimi yangilandi`, 'ok');
@@ -1306,7 +1308,7 @@ async function grantPremium() {
 async function revokePremium() {
   const email = document.getElementById('premiumEmail').value.trim();
   if (!email) { toast("Email kiriting", 'err'); return; }
-  if (supabase) await supabase.from('profiles').update({ plan:'free' }).eq('email', email);
+  if (sb) await sb.from('profiles').update({ plan:'free' }).eq('email', email);
   toast(`✅ ${email} premium olindi`, 'ok');
   document.getElementById('premiumEmail').value='';
 }
@@ -1318,14 +1320,14 @@ function saveAd() {
   if (!title||!text) { toast("Sarlavha va matnni kiriting", 'err'); return; }
   const ad = { title, text, url, created_at: new Date().toISOString() };
   localStorage.setItem('az_current_ad', JSON.stringify(ad));
-  if (supabase) supabase.from('config').upsert({ key:'ad', value:ad }).then(()=>{},()=>{});
+  if (sb) sb.from('config').upsert({ key:'ad', value:ad }).then(()=>{},()=>{});
   toast("✅ Reklama saqlandi!", 'ok');
   loadAdminData();
 }
 
 function clearAd() {
   localStorage.removeItem('az_current_ad');
-  if (supabase) supabase.from('config').delete().eq('key','ad').then(()=>{},()=>{});
+  if (sb) sb.from('config').delete().eq('key','ad').then(()=>{},()=>{});
   document.getElementById('currentAdPreview').innerHTML='';
   toast("Reklama o'chirildi", 'ok');
 }
