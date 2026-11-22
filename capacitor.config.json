@@ -1,0 +1,8 @@
+{
+  "appId": "com.azimbek.azlearn",
+  "appName": "AZ Learn",
+  "webDir": "public",
+  "backgroundColor": "#08090f",
+  "server": { "androidScheme": "https" },
+  "android": { "allowMixedContent": false }
+}
