@@ -9,6 +9,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="AZ Learn">
 <link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <title>AZ Language Learning</title>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Noto+Sans+KR:wght@400;700&family=Noto+Sans+Arabic:wght@400;700&family=Noto+Serif:wght@400;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -419,12 +420,51 @@ input[type="text"],input[type="email"],input[type="password"],select,textarea{mi
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;}}
 
 </style>
+<style id="design-v4">
+/* ═══════════ DESIGN v4 ═══════════ */
+html,body{overflow-x:hidden;max-width:100%;}
+body{background:radial-gradient(900px 520px at 50% -6%,var(--glow,rgba(124,92,252,.25)),transparent 72%),var(--bg);background-attachment:fixed;}
+.header h1{font-size:clamp(1.1rem,6vw,1.9rem);overflow-wrap:anywhere;}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.stat-card{min-width:0;padding:10px 4px;}
+.stat-card .num{font-size:1.25rem;}
+.stat-card .label{font-size:.5rem;letter-spacing:.4px;}
+.tab-btn{min-width:0;}
+/* orqa fon: bayroq xira + diqqatga sazovor joy */
+#flagWash{position:fixed;inset:-12%;z-index:0;pointer-events:none;opacity:.17;filter:blur(55px) saturate(1.35);transition:background .6s;}
+#bgSilhouette{opacity:.22 !important;height:70vh;-webkit-mask-image:linear-gradient(to top,#000 58%,transparent);mask-image:linear-gradient(to top,#000 58%,transparent);}
+.card,.progress-card,.stat-card,.admin-section,.auth-box,.admin-stat-card{background:rgba(22,25,38,.58);}
+#splash .sp-img{width:124px;height:124px;border-radius:30px;box-shadow:0 14px 56px rgba(10,62,190,.6);animation:splashPulse 1.4s ease-in-out infinite;}
+.chart-bar-item .cbi-val{width:auto;min-width:96px;}
+/* Premium oynasi */
+.modal{position:fixed;inset:0;z-index:9000;background:rgba(4,5,10,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:none;align-items:flex-end;justify-content:center;}
+.modal.open{display:flex;}
+.modal-box{width:100%;max-width:480px;max-height:92vh;overflow-y:auto;background:var(--card);border:1px solid rgba(255,255,255,.1);border-radius:26px 26px 0 0;padding:22px 18px calc(22px + env(safe-area-inset-bottom));position:relative;animation:sheetUp .3s ease;}
+@media(min-width:700px){.modal{align-items:center;}.modal-box{border-radius:26px;}}
+.modal-x{position:absolute;top:12px;right:14px;width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;}
+.modal-title{font-family:'Unbounded',system-ui,sans-serif;font-size:1.15rem;font-weight:900;color:var(--gold);}
+.modal-sub{font-size:.8rem;color:var(--muted);margin:4px 0 16px;}
+.plan-list{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.plan{border:2px solid var(--border);border-radius:16px;padding:14px 6px;text-align:center;background:var(--surface);cursor:pointer;position:relative;}
+.plan.sel{border-color:var(--gold);background:rgba(232,184,75,.09);}
+.plan .pl-m{font-family:'Unbounded',system-ui,sans-serif;font-size:.8rem;font-weight:700;}
+.plan .pl-p{font-size:.74rem;color:var(--gold);margin-top:5px;}
+.plan .pl-t{position:absolute;top:-9px;right:8px;background:var(--success);color:#04210f;font-size:.55rem;font-weight:700;padding:2px 7px;border-radius:8px;}
+.pay-step{font-size:.82rem;line-height:1.5;margin:12px 0 6px;}
+.card-num{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px dashed var(--gold);border-radius:12px;padding:11px 12px;font-family:'JetBrains Mono',monospace;font-size:1rem;letter-spacing:1px;}
+.card-num button{margin-left:auto;}
+.pay-pending{background:rgba(232,184,75,.1);border:1px solid rgba(232,184,75,.3);border-radius:12px;padding:12px;font-size:.8rem;color:var(--gold);margin-top:12px;}
+.pay-row{display:flex;align-items:center;gap:8px;padding:10px;background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;flex-wrap:wrap;}
+.pay-meta{font-size:.72rem;color:var(--muted);margin-top:2px;word-break:break-word;}
+@keyframes sheetUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+</style>
 </head>
 <body>
-<div id="splash"><div class="sp-logo">AZ</div><div class="sp-name">LEARN</div></div>
+<div id="splash"><img class="sp-img" src="logo.png" alt="AZ Learn"><div class="sp-name">LEARN</div></div>
 
 <div class="flag-stripe" id="flagStripe"></div>
 <div class="bg-glow"></div>
+<div id="flagWash"></div>
 <div id="particles"></div>
 <svg id="bgSilhouette" viewBox="0 0 1400 520" fill="none" xmlns="http://www.w3.org/2000/svg">
   <g id="silhouetteContent"></g>
@@ -434,7 +474,7 @@ input[type="text"],input[type="email"],input[type="password"],select,textarea{mi
 <div id="authScreen" class="screen active">
   <div class="auth-box">
     <div class="auth-logo">
-      <div style="font-size:2.5rem;margin-bottom:8px">🌐</div>
+      <img src="logo.png" alt="AZ Learn" style="width:104px;height:104px;border-radius:26px;margin-bottom:10px;box-shadow:0 12px 40px rgba(10,62,190,.55)">
       <div class="auth-logo .logo-text" style="font-family:'Unbounded',sans-serif;font-size:1.6rem;font-weight:900;background:linear-gradient(135deg,#fff,#7c5cfc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">AZ_Learn</div>
       <div class="auth-logo .logo-sub" style="font-size:0.75rem;color:#525a78;margin-top:4px">Tillarni o'rganing · Учите языки · 언어를 배우세요</div>
     </div>
@@ -522,7 +562,7 @@ input[type="text"],input[type="email"],input[type="password"],select,textarea{mi
         <div class="input-row" id="addWordRow"></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <button class="btn btn-primary" onclick="addWord()">Qo'shish</button>
-          <button class="btn btn-ghost" onclick="addSampleWords()">📦 Namuna</button>
+          <button class="btn btn-ghost" onclick="addSampleWords()">📦 To'plam</button>
           <button class="btn btn-ghost" onclick="exportWords()">💾 Export</button>
           <label class="btn btn-ghost" style="cursor:pointer">📂 Import<input type="file" accept=".json" onchange="importWords(event)" style="display:none"></label>
         </div>
@@ -603,7 +643,7 @@ input[type="text"],input[type="email"],input[type="password"],select,textarea{mi
     <div class="admin-section">
       <h3>👥 Foydalanuvchilar ro'yxati</h3>
       <div style="overflow-x:auto"><table class="user-table" id="usersTable">
-        <thead><tr><th>Ism</th><th>Email</th><th>Reja</th><th>So'z</th><th>Streak</th><th>Amal</th></tr></thead>
+        <thead><tr><th>Ism</th><th>Email</th><th>Reja</th><th>Premium</th><th>Streak</th><th>Amal</th></tr></thead>
         <tbody id="usersBody"></tbody>
       </table></div>
     </div>
@@ -614,6 +654,10 @@ input[type="text"],input[type="email"],input[type="password"],select,textarea{mi
         <input type="text" id="notifBody" placeholder="Xabar matni...">
         <button class="btn btn-primary" onclick="sendAdminNotif()">📤 Yuborish</button>
       </div>
+    </div>
+    <div class="admin-section">
+      <h3>💳 To'lov so'rovlari (kutilmoqda)</h3>
+      <div id="paymentsList"></div>
     </div>
     <div class="admin-section">
       <h3>💰 Premium boshqaruvi</h3>
@@ -638,6 +682,16 @@ input[type="text"],input[type="email"],input[type="password"],select,textarea{mi
       </div>
       <div id="currentAdPreview" style="margin-top:14px"></div>
     </div>
+  </div>
+</div>
+
+<div id="premiumModal" class="modal" onclick="if(event.target===this)closePremiumModal()">
+  <div class="modal-box">
+    <button class="modal-x" onclick="closePremiumModal()">✕</button>
+    <div class="modal-title">⭐ Premium</div>
+    <div class="modal-sub">Reklamasiz foydalaning va loyihani qo'llab-quvvatlang</div>
+    <div id="planList" class="plan-list"></div>
+    <div id="payBox"></div>
   </div>
 </div>
 
@@ -767,7 +821,7 @@ function switchAuthTab(tab, btn) {
     if (session?.user) onUserLoggedIn(session.user);
     else showScreen('authScreen');
     sb.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) onUserLoggedIn(session.user);
+      if (session?.user) { if (!currentUser || currentUser.id !== session.user.id) onUserLoggedIn(session.user); }
       else if (_event === 'SIGNED_OUT') { currentUser=null; showScreen('authScreen'); }
     });
   } else {
@@ -791,10 +845,10 @@ async function loadUserProfile(user) {
     try {
       const { data } = await sb.from('profiles').select('*').eq('id', user.id).single();
       if (data) {
-        userProfile = { name:data.name, email:data.email, plan:data.plan||'free', streak:data.streak||0, dailyGoal:data.daily_goal||10, dailyDone:data.daily_done||0, lastActive:data.last_active||'' };
+        userProfile = { name:data.name, email:data.email, plan:data.plan||'free', streak:data.streak||0, dailyGoal:data.daily_goal||10, dailyDone:data.daily_done||0, lastActive:data.last_active||'', premiumUntil:data.premium_until||null };
       } else {
         userProfile = { name: user.user_metadata?.full_name||user.email?.split('@')[0]||'Foydalanuvchi', email:user.email, plan:'free', streak:0, dailyGoal:10, dailyDone:0, lastActive:'' };
-        await sb.from('profiles').upsert({ id:user.id, ...userProfile, last_active:userProfile.lastActive, daily_goal:userProfile.dailyGoal, daily_done:userProfile.dailyDone });
+        await sb.from('profiles').upsert({ id:user.id, name:userProfile.name, email:userProfile.email, plan:'free', streak:0, daily_goal:10, daily_done:0, last_active:'' });
       }
     } catch(e) { fallbackProfile(user); }
   } else { fallbackProfile(user); }
@@ -810,6 +864,7 @@ function fallbackProfile(user) {
 function updateStreak() {
   const today = new Date().toDateString();
   const yesterday = new Date(Date.now()-86400000).toDateString();
+  if (userProfile.lastActive!==today) userProfile.dailyDone=0;
   if (userProfile.lastActive===yesterday) userProfile.streak=(userProfile.streak||0)+1;
   else if (userProfile.lastActive!==today) userProfile.streak=1;
   userProfile.lastActive=today;
@@ -868,7 +923,7 @@ async function doRegister() {
 
 async function doGoogleLogin() {
   if (!sb) { toast("Demo rejimda Google kirish yo'q",'err'); return; }
-  const { error } = await sb.auth.signInWithOAuth({ provider:'google', options:{ redirectTo:window.location.href } });
+  const { error } = await sb.auth.signInWithOAuth({ provider:'google', options:{ redirectTo:location.origin+location.pathname } });
   if (error) toast("Xatolik: "+error.message,'err');
 }
 
@@ -876,7 +931,7 @@ async function doResetPassword() {
   const email = document.getElementById('loginEmail').value.trim();
   if (!email) { toast("Avval emailni kiriting",'err'); return; }
   if (sb) {
-    const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo:window.location.href });
+    const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo:location.origin+location.pathname });
     if (error) toast("Xatolik: "+error.message,'err');
     else toast("✅ Parol tiklash emaili yuborildi!",'ok');
   }
@@ -895,6 +950,109 @@ async function doLogout() {
 // ═══════════════════════════════════════════════
 // USER BAR
 // ═══════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════
+// YORDAMCHILAR + BOSHLANG'ICH TO'PLAM (353 ta so'z/ibora, har til uchun)
+// ═══════════════════════════════════════════════
+const MASTER = [["salom","hello","привет","안녕하세요","annyeonghaseyo","مرحبا","marhaban","Iboralar"],["xayr","goodbye","до свидания","안녕히 가세요","annyeonghi gaseyo","مع السلامة","maʿa as-salama","Iboralar"],["rahmat","thank you","спасибо","감사합니다","gamsahamnida","شكرا","shukran","Iboralar"],["iltimos","please","пожалуйста","부탁합니다","butakamnida","من فضلك","min fadlik","Iboralar"],["kechirasiz","sorry","извините","죄송합니다","joesonghamnida","آسف","asif","Iboralar"],["ha","yes","да","네","ne","نعم","naʿam","Iboralar"],["yo'q","no","нет","아니요","aniyo","لا","la","Iboralar"],["xayrli tong","good morning","доброе утро","좋은 아침","joeun achim","صباح الخير","sabah al-khayr","Iboralar"],["xayrli kech","good evening","добрый вечер","좋은 저녁","joeun jeonyeok","مساء الخير","masa' al-khayr","Iboralar"],["xayrli tun","good night","спокойной ночи","안녕히 주무세요","annyeonghi jumuseyo","تصبح على خير","tusbih ʿala khayr","Iboralar"],["Ismingiz nima?","What is your name?","Как вас зовут?","이름이 뭐예요?","ireumi mwoyeyo","ما اسمك؟","ma ismuk","Iboralar"],["Mening ismim...","My name is...","Меня зовут...","제 이름은 ...입니다","je ireumeun ...imnida","اسمي...","ismi...","Iboralar"],["Tanishganimdan xursandman","Nice to meet you","Приятно познакомиться","만나서 반갑습니다","mannaseo bangapseumnida","تشرفنا","tasharrafna","Iboralar"],["Qalaysiz?","How are you?","Как дела?","어떻게 지내세요?","eotteoke jinaeseyo","كيف حالك؟","kayfa haluk","Iboralar"],["Yaxshiman","I am fine","У меня всё хорошо","잘 지내요","jal jinaeyo","أنا بخير","ana bikhayr","Iboralar"],["Tushunmadim","I don't understand","Я не понимаю","이해 못 해요","ihae mot haeyo","لا أفهم","la afham","Iboralar"],["Takrorlang, iltimos","Please repeat","Повторите, пожалуйста","다시 말해 주세요","dasi malhae juseyo","أعد من فضلك","aʿid min fadlik","Iboralar"],["Sekinroq gapiring","Speak slowly","Говорите медленнее","천천히 말해 주세요","cheoncheonhi malhae juseyo","تكلم ببطء","takallam bibut'","Iboralar"],["Yordam bering","Help me","Помогите","도와주세요","dowajuseyo","ساعدني","saʿidni","Iboralar"],["Qancha turadi?","How much is it?","Сколько это стоит?","얼마예요?","eolmayeyo","بكم هذا؟","bikam hadha","Iboralar"],["Hojatxona qayerda?","Where is the toilet?","Где туалет?","화장실이 어디예요?","hwajangsiri eodiyeyo","أين الحمام؟","ayna al-hammam","Iboralar"],["Men sizni sevaman","I love you","Я люблю тебя","사랑해요","saranghaeyo","أحبك","uhibbuka","Iboralar"],["Xush kelibsiz","Welcome","Добро пожаловать","환영합니다","hwanyeonghamnida","أهلا وسهلا","ahlan wa sahlan","Iboralar"],["Tabriklayman","Congratulations","Поздравляю","축하합니다","chukahamnida","مبروك","mabruk","Iboralar"],["Omad tilayman","Good luck","Удачи","행운을 빌어요","haengunneul bireoyo","حظا سعيدا","hazzan saʿidan","Iboralar"],["Hammasi joyida","It's okay","Ничего страшного","괜찮아요","gwaenchanayo","لا بأس","la ba's","Iboralar"],["Men bilmayman","I don't know","Я не знаю","몰라요","mollayo","لا أعرف","la aʿrif","Iboralar"],["Men o'zbekman","I am Uzbek","Я узбек","저는 우즈베키스탄 사람이에요","jeoneun ujebekiseutan saramieyo","أنا أوزبكي","ana uzbaki","Iboralar"],["Ko'rishguncha","See you later","До встречи","또 만나요","tto mannayo","أراك لاحقا","arak lahiqan","Iboralar"],["nima","what","что","무엇","mueot","ماذا","madha","Savollar"],["kim","who","кто","누구","nugu","من","man","Savollar"],["qayerda","where","где","어디","eodi","أين","ayna","Savollar"],["qachon","when","когда","언제","eonje","متى","mata","Savollar"],["nima uchun","why","почему","왜","wae","لماذا","limadha","Savollar"],["qanday","how","как","어떻게","eotteoke","كيف","kayfa","Savollar"],["qancha","how many","сколько","얼마나","eolmana","كم","kam","Savollar"],["qaysi","which","какой","어느","eoneu","أي","ayy","Savollar"],["nol","zero","ноль","영","yeong","صفر","sifr","Raqamlar"],["bir","one","один","하나","hana","واحد","wahid","Raqamlar"],["ikki","two","два","둘","dul","اثنان","ithnan","Raqamlar"],["uch","three","три","셋","set","ثلاثة","thalatha","Raqamlar"],["to'rt","four","четыре","넷","net","أربعة","arbaʿa","Raqamlar"],["besh","five","пять","다섯","daseot","خمسة","khamsa","Raqamlar"],["olti","six","шесть","여섯","yeoseot","ستة","sitta","Raqamlar"],["yetti","seven","семь","일곱","ilgop","سبعة","sabʿa","Raqamlar"],["sakkiz","eight","восемь","여덟","yeodeol","ثمانية","thamaniya","Raqamlar"],["to'qqiz","nine","девять","아홉","ahop","تسعة","tisʿa","Raqamlar"],["o'n","ten","десять","열","yeol","عشرة","ʿashara","Raqamlar"],["yigirma","twenty","двадцать","스물","seumul","عشرون","ʿishrun","Raqamlar"],["yuz (100)","hundred","сто","백","baek","مئة","mi'a","Raqamlar"],["ming","thousand","тысяча","천","cheon","ألف","alf","Raqamlar"],["ona","mother","мама","어머니","eomeoni","أم","umm","Oila"],["ota","father","папа","아버지","abeoji","أب","ab","Oila"],["aka-uka","brother","брат","형제","hyeongje","أخ","akh","Oila"],["opa-singil","sister","сестра","자매","jamae","أخت","ukht","Oila"],["o'g'il","son","сын","아들","adeul","ابن","ibn","Oila"],["qiz","daughter","дочь","딸","ttal","ابنة","ibna","Oila"],["bobo","grandfather","дедушка","할아버지","harabeoji","جد","jadd","Oila"],["buvi","grandmother","бабушка","할머니","halmeoni","جدة","jadda","Oila"],["er","husband","муж","남편","nampyeon","زوج","zawj","Oila"],["xotin","wife","жена","아내","anae","زوجة","zawja","Oila"],["do'st","friend","друг","친구","chingu","صديق","sadiq","Oila"],["oila","family","семья","가족","gajok","عائلة","ʿa'ila","Oila"],["bola","child","ребёнок","아이","ai","طفل","tifl","Oila"],["odam","person","человек","사람","saram","شخص","shakhs","Oila"],["erkak","man","мужчина","남자","namja","رجل","rajul","Oila"],["ayol","woman","женщина","여자","yeoja","امرأة","imra'a","Oila"],["non","bread","хлеб","빵","ppang","خبز","khubz","Ovqat"],["go'sht","meat","мясо","고기","gogi","لحم","lahm","Ovqat"],["tovuq go'shti","chicken","курица","닭고기","dakgogi","دجاج","dajaj","Ovqat"],["baliq","fish","рыба","생선","saengseon","سمك","samak","Ovqat"],["guruch","rice","рис","쌀","ssal","أرز","aruzz","Ovqat"],["tuxum","egg","яйцо","계란","gyeran","بيضة","bayda","Ovqat"],["sut","milk","молоко","우유","uyu","حليب","halib","Ovqat"],["pishloq","cheese","сыр","치즈","chijeu","جبن","jubn","Ovqat"],["shakar","sugar","сахар","설탕","seoltang","سكر","sukkar","Ovqat"],["tuz","salt","соль","소금","sogeum","ملح","milh","Ovqat"],["yog'","oil","масло","기름","gireum","زيت","zayt","Ovqat"],["sho'rva","soup","суп","국","guk","شوربة","shurba","Ovqat"],["salat","salad","салат","샐러드","saelleodeu","سلطة","salata","Ovqat"],["shirinlik","dessert","десерт","디저트","dijeoteu","حلوى","halwa","Ovqat"],["nonushta","breakfast","завтрак","아침 식사","achim siksa","فطور","futur","Ovqat"],["tushlik","lunch","обед","점심","jeomsim","غداء","ghada'","Ovqat"],["kechki ovqat","dinner","ужин","저녁 식사","jeonyeok siksa","عشاء","ʿasha'","Ovqat"],["ovqat","food","еда","음식","eumsik","طعام","taʿam","Ovqat"],["olma","apple","яблоко","사과","sagwa","تفاحة","tuffaha","Mevalar"],["banan","banana","банан","바나나","banana","موزة","mawza","Mevalar"],["apelsin","orange","апельсин","오렌지","orenji","برتقالة","burtuqala","Mevalar"],["uzum","grape","виноград","포도","podo","عنب","ʿinab","Mevalar"],["tarvuz","watermelon","арбуз","수박","subak","بطيخ","battikh","Mevalar"],["qovun","melon","дыня","멜론","mellon","شمام","shammam","Mevalar"],["anor","pomegranate","гранат","석류","seongnyu","رمان","rumman","Mevalar"],["shaftoli","peach","персик","복숭아","boksunga","خوخ","khawkh","Mevalar"],["nok","pear","груша","배","bae","كمثرى","kummathra","Mevalar"],["limon","lemon","лимон","레몬","remon","ليمون","laymun","Mevalar"],["qulupnay","strawberry","клубника","딸기","ttalgi","فراولة","farawla","Mevalar"],["pomidor","tomato","помидор","토마토","tomato","طماطم","tamatim","Sabzavotlar"],["bodring","cucumber","огурец","오이","oi","خيار","khiyar","Sabzavotlar"],["kartoshka","potato","картофель","감자","gamja","بطاطس","batatis","Sabzavotlar"],["sabzi","carrot","морковь","당근","danggeun","جزر","jazar","Sabzavotlar"],["piyoz","onion","лук","양파","yangpa","بصل","basal","Sabzavotlar"],["sarimsoq","garlic","чеснок","마늘","maneul","ثوم","thawm","Sabzavotlar"],["karam","cabbage","капуста","양배추","yangbaechu","ملفوف","malfuf","Sabzavotlar"],["qalampir","pepper","перец","고추","gochu","فلفل","filfil","Sabzavotlar"],["suv","water","вода","물","mul","ماء","maa","Ichimliklar"],["choy","tea","чай","차","cha","شاي","shay","Ichimliklar"],["qahva","coffee","кофе","커피","keopi","قهوة","qahwa","Ichimliklar"],["sharbat","juice","сок","주스","juseu","عصير","ʿasir","Ichimliklar"],["limonad","lemonade","лимонад","레모네이드","remoneideu","عصير ليمون","ʿasir laymun","Ichimliklar"],["ko'ylak","shirt","рубашка","셔츠","syeocheu","قميص","qamis","Kiyim"],["shim","trousers","брюки","바지","baji","بنطال","bantal","Kiyim"],["libos","dress","платье","원피스","wonpiseu","فستان","fustan","Kiyim"],["poyabzal","shoes","обувь","신발","sinbal","حذاء","hidha'","Kiyim"],["shlyapa","hat","шляпа","모자","moja","قبعة","qubbaʿa","Kiyim"],["palto","coat","пальто","코트","koteu","معطف","miʿtaf","Kiyim"],["paypoq","socks","носки","양말","yangmal","جوارب","jawarib","Kiyim"],["sharf","scarf","шарф","목도리","mokdori","وشاح","washah","Kiyim"],["ko'zoynak","glasses","очки","안경","angyeong","نظارة","nazzara","Kiyim"],["sumka","bag","сумка","가방","gabang","حقيبة","haqiba","Kiyim"],["qo'l soati","watch","часы","시계","sigye","ساعة يد","saʿat yad","Kiyim"],["qizil","red","красный","빨간색","ppalgansaek","أحمر","ahmar","Ranglar"],["ko'k","blue","синий","파란색","paransaek","أزرق","azraq","Ranglar"],["yashil","green","зелёный","초록색","choroksaek","أخضر","akhdar","Ranglar"],["sariq","yellow","жёлтый","노란색","noransaek","أصفر","asfar","Ranglar"],["qora","black","чёрный","검은색","geomeunsaek","أسود","aswad","Ranglar"],["oq","white","белый","흰색","huinsaek","أبيض","abyad","Ranglar"],["to'q sariq","orange (color)","оранжевый","주황색","juhwangsaek","برتقالي","burtuqali","Ranglar"],["pushti","pink","розовый","분홍색","bunhongsaek","وردي","wardi","Ranglar"],["kulrang","gray","серый","회색","hoesaek","رمادي","ramadi","Ranglar"],["jigarrang","brown","коричневый","갈색","galsaek","بني","bunni","Ranglar"],["bugun","today","сегодня","오늘","oneul","اليوم","al-yawm","Vaqt"],["ertaga","tomorrow","завтра","내일","naeil","غدا","ghadan","Vaqt"],["kecha","yesterday","вчера","어제","eoje","أمس","ams","Vaqt"],["hozir","now","сейчас","지금","jigeum","الآن","al-an","Vaqt"],["vaqt","time","время","시간","sigan","وقت","waqt","Vaqt"],["kun","day","день","일","il","يوم","yawm","Vaqt"],["hafta","week","неделя","주","ju","أسبوع","usbuʿ","Vaqt"],["oy (davr)","month","месяц","월","wol","شهر","shahr","Vaqt"],["yil","year","год","년","nyeon","سنة","sana","Vaqt"],["daqiqa","minute","минута","분","bun","دقيقة","daqiqa","Vaqt"],["ertalab","morning","утро","아침","achim","صباح","sabah","Vaqt"],["kechqurun","evening","вечер","저녁","jeonyeok","مساء","masa'","Vaqt"],["tun","night","ночь","밤","bam","ليل","layl","Vaqt"],["dushanba","Monday","понедельник","월요일","woryoil","الاثنين","al-ithnayn","Vaqt"],["seshanba","Tuesday","вторник","화요일","hwayoil","الثلاثاء","ath-thulatha'","Vaqt"],["chorshanba","Wednesday","среда","수요일","suyoil","الأربعاء","al-arbiʿa'","Vaqt"],["payshanba","Thursday","четверг","목요일","mogyoil","الخميس","al-khamis","Vaqt"],["juma","Friday","пятница","금요일","geumyoil","الجمعة","al-jumʿa","Vaqt"],["shanba","Saturday","суббота","토요일","toyoil","السبت","as-sabt","Vaqt"],["yakshanba","Sunday","воскресенье","일요일","iryoil","الأحد","al-ahad","Vaqt"],["mushuk","cat","кошка","고양이","goyangi","قطة","qitta","Hayvonlar"],["it","dog","собака","개","gae","كلب","kalb","Hayvonlar"],["ot","horse","лошадь","말","mal","حصان","hisan","Hayvonlar"],["sigir","cow","корова","소","so","بقرة","baqara","Hayvonlar"],["qo'y","sheep","овца","양","yang","خروف","kharuf","Hayvonlar"],["qush","bird","птица","새","sae","طائر","ta'ir","Hayvonlar"],["sher","lion","лев","사자","saja","أسد","asad","Hayvonlar"],["fil","elephant","слон","코끼리","kokkiri","فيل","fil","Hayvonlar"],["ayiq","bear","медведь","곰","gom","دب","dubb","Hayvonlar"],["bo'ri","wolf","волк","늑대","neukdae","ذئب","dhi'b","Hayvonlar"],["quyon","rabbit","кролик","토끼","tokki","أرنب","arnab","Hayvonlar"],["tuya","camel","верблюд","낙타","nakta","جمل","jamal","Hayvonlar"],["sichqon","mouse","мышь","쥐","jwi","فأر","fa'r","Hayvonlar"],["maymun","monkey","обезьяна","원숭이","wonsungi","قرد","qird","Hayvonlar"],["yo'lbars","tiger","тигр","호랑이","horangi","ببر","babr","Hayvonlar"],["ilon","snake","змея","뱀","baem","ثعبان","thuʿban","Hayvonlar"],["asalari","bee","пчела","벌","beol","نحلة","nahla","Hayvonlar"],["bosh","head","голова","머리","meori","رأس","ra's","Tana"],["ko'z","eye","глаз","눈","nun","عين","ʿayn","Tana"],["quloq","ear","ухо","귀","gwi","أذن","udhun","Tana"],["burun","nose","нос","코","ko","أنف","anf","Tana"],["og'iz","mouth","рот","입","ip","فم","fam","Tana"],["qo'l","hand","рука","손","son","يد","yad","Tana"],["oyoq","foot","нога","발","bal","قدم","qadam","Tana"],["yurak","heart","сердце","심장","simjang","قلب","qalb","Tana"],["soch","hair","волосы","머리카락","meorikarak","شعر","shaʿr","Tana"],["tish","tooth","зуб","이","i","سن","sinn","Tana"],["yuz (chehra)","face","лицо","얼굴","eolgul","وجه","wajh","Tana"],["barmoq","finger","палец","손가락","songarak","إصبع","isbaʿ","Tana"],["uy","house","дом","집","jip","بيت","bayt","Uy"],["xona","room","комната","방","bang","غرفة","ghurfa","Uy"],["eshik","door","дверь","문","mun","باب","bab","Uy"],["deraza","window","окно","창문","changmun","نافذة","nafidha","Uy"],["stol","table","стол","탁자","takja","طاولة","tawila","Uy"],["stul","chair","стул","의자","uija","كرسي","kursi","Uy"],["karavot","bed","кровать","침대","chimdae","سرير","sarir","Uy"],["oshxona","kitchen","кухня","부엌","bueok","مطبخ","matbakh","Uy"],["telefon","phone","телефон","전화기","jeonhwagi","هاتف","hatif","Uy"],["kompyuter","computer","компьютер","컴퓨터","keompyuteo","حاسوب","hasub","Uy"],["televizor","television","телевизор","텔레비전","tellebijeon","تلفزيون","tilfizyun","Uy"],["kalit","key","ключ","열쇠","yeolsoe","مفتاح","miftah","Uy"],["pul","money","деньги","돈","don","مال","mal","Uy"],["chiroq","lamp","лампа","전등","jeondeung","مصباح","misbah","Uy"],["mashina","car","машина","자동차","jadongcha","سيارة","sayyara","Transport"],["avtobus","bus","автобус","버스","beoseu","حافلة","hafila","Transport"],["poyezd","train","поезд","기차","gicha","قطار","qitar","Transport"],["samolyot","airplane","самолёт","비행기","bihaenggi","طائرة","ta'ira","Transport"],["velosiped","bicycle","велосипед","자전거","jajeongeo","دراجة","darraja","Transport"],["taksi","taxi","такси","택시","taeksi","تاكسي","taksi","Transport"],["yo'l","road","дорога","길","gil","طريق","tariq","Transport"],["metro","subway","метро","지하철","jihacheol","مترو","mitru","Transport"],["kema","ship","корабль","선박","seonbak","سفينة","safina","Transport"],["aeroport","airport","аэропорт","공항","gonghang","مطار","matar","Transport"],["bekat","station","станция","역","yeok","محطة","mahatta","Transport"],["chipta","ticket","билет","표","pyo","تذكرة","tadhkira","Transport"],["shahar","city","город","도시","dosi","مدينة","madina","Joylar"],["qishloq","village","деревня","마을","maeul","قرية","qarya","Joylar"],["ko'cha","street","улица","거리","geori","شارع","shariʿ","Joylar"],["bozor","market","рынок","시장","sijang","سوق","suq","Joylar"],["do'kon","shop","магазин","가게","gage","متجر","matjar","Joylar"],["kasalxona","hospital","больница","병원","byeongwon","مستشفى","mustashfa","Joylar"],["maktab","school","школа","학교","hakgyo","مدرسة","madrasa","Joylar"],["universitet","university","университет","대학교","daehakgyo","جامعة","jamiʿa","Joylar"],["bank","bank","банк","은행","eunhaeng","بنك","bank","Joylar"],["mehmonxona","hotel","гостиница","호텔","hotel","فندق","funduq","Joylar"],["restoran","restaurant","ресторан","식당","sikdang","مطعم","maṭʿam","Joylar"],["masjid","mosque","мечеть","모스크","moseukeu","مسجد","masjid","Joylar"],["dorixona","pharmacy","аптека","약국","yakguk","صيدلية","saydaliya","Joylar"],["kutubxona","library","библиотека","도서관","doseogwan","مكتبة","maktaba","Joylar"],["park","park","парк","공원","gongwon","حديقة","hadiqa","Joylar"],["mamlakat","country","страна","나라","nara","بلد","balad","Joylar"],["o'qituvchi","teacher","учитель","선생님","seonsaengnim","معلم","muʿallim","Maktab va ish"],["talaba","student","студент","학생","haksaeng","طالب","talib","Maktab va ish"],["shifokor","doctor","врач","의사","uisa","طبيب","tabib","Maktab va ish"],["ishchi","worker","рабочий","노동자","nodongja","عامل","ʿamil","Maktab va ish"],["haydovchi","driver","водитель","운전사","unjeonsa","سائق","sa'iq","Maktab va ish"],["oshpaz","cook","повар","요리사","yorisa","طباخ","tabbakh","Maktab va ish"],["ish (kasb)","job","работа","직업","jigeop","وظيفة","wazifa","Maktab va ish"],["dars","lesson","урок","수업","sueop","درس","dars","Maktab va ish"],["savol","question","вопрос","질문","jilmun","سؤال","su'al","Maktab va ish"],["javob","answer","ответ","대답","daedap","جواب","jawab","Maktab va ish"],["qalam","pen","ручка","펜","pen","قلم","qalam","Maktab va ish"],["daftar","notebook","тетрадь","공책","gongchaek","دفتر","daftar","Maktab va ish"],["kitob","book","книга","책","chaek","كتاب","kitab","Maktab va ish"],["til","language","язык","언어","eoneo","لغة","lugha","Maktab va ish"],["so'z","word","слово","단어","daneo","كلمة","kalima","Maktab va ish"],["bormoq","to go","идти","가다","gada","يذهب","yadhhab","Fe'llar"],["kelmoq","to come","приходить","오다","oda","يأتي","ya'ti","Fe'llar"],["yemoq","to eat","есть","먹다","meokda","يأكل","ya'kul","Fe'llar"],["ichmoq","to drink","пить","마시다","masida","يشرب","yashrab","Fe'llar"],["uxlamoq","to sleep","спать","자다","jada","ينام","yanam","Fe'llar"],["o'qimoq","to read","читать","읽다","ikda","يقرأ","yaqra'","Fe'llar"],["yozmoq","to write","писать","쓰다","sseuda","يكتب","yaktub","Fe'llar"],["gapirmoq","to speak","говорить","말하다","malhada","يتكلم","yatakallam","Fe'llar"],["ko'rmoq","to see","видеть","보다","boda","يرى","yara","Fe'llar"],["eshitmoq","to hear","слышать","듣다","deutda","يسمع","yasmaʿ","Fe'llar"],["bilmoq","to know","знать","알다","alda","يعرف","yaʿrif","Fe'llar"],["xohlamoq","to want","хотеть","원하다","wonhada","يريد","yurid","Fe'llar"],["sevmoq","to love","любить","사랑하다","saranghada","يحب","yuhibb","Fe'llar"],["yashamoq","to live","жить","살다","salda","يعيش","yaʿish","Fe'llar"],["ishlamoq","to work","работать","일하다","ilhada","يعمل","yaʿmal","Fe'llar"],["o'rganmoq","to learn","учиться","배우다","baeuda","يتعلم","yataʿallam","Fe'llar"],["o'ynamoq","to play","играть","놀다","nolda","يلعب","yalʿab","Fe'llar"],["sotib olmoq","to buy","покупать","사다","sada","يشتري","yashtari","Fe'llar"],["sotmoq","to sell","продавать","팔다","palda","يبيع","yabiʿ","Fe'llar"],["bermoq","to give","давать","주다","juda","يعطي","yuʿti","Fe'llar"],["olmoq","to take","брать","가지다","gajida","يأخذ","ya'khudh","Fe'llar"],["ochmoq","to open","открывать","열다","yeolda","يفتح","yaftah","Fe'llar"],["yopmoq","to close","закрывать","닫다","datda","يغلق","yughliq","Fe'llar"],["yugurmoq","to run","бежать","달리다","dallida","يركض","yarkud","Fe'llar"],["yurmoq","to walk","ходить","걷다","geotda","يمشي","yamshi","Fe'llar"],["kutmoq","to wait","ждать","기다리다","gidarida","ينتظر","yantazir","Fe'llar"],["yordam bermoq","to help","помогать","돕다","dopda","يساعد","yusaʿid","Fe'llar"],["qo'ng'iroq qilmoq","to call","звонить","전화하다","jeonhwahada","يتصل","yattasil","Fe'llar"],["tushunmoq","to understand","понимать","이해하다","ihaehada","يفهم","yafham","Fe'llar"],["o'ylamoq","to think","думать","생각하다","saenggakada","يفكر","yufakkir","Fe'llar"],["katta","big","большой","크다","keuda","كبير","kabir","Sifatlar"],["kichik","small","маленький","작다","jakda","صغير","saghir","Sifatlar"],["yaxshi","good","хороший","좋다","jota","جيد","jayyid","Sifatlar"],["yomon","bad","плохой","나쁘다","nappeuda","سيئ","sayyi'","Sifatlar"],["chiroyli","beautiful","красивый","아름답다","areumdapda","جميل","jamil","Sifatlar"],["yangi","new","новый","새롭다","saeropda","جديد","jadid","Sifatlar"],["eski","old","старый","오래되다","oraedoeda","قديم","qadim","Sifatlar"],["issiq","hot","горячий","뜨겁다","tteugeopda","حار","harr","Sifatlar"],["sovuq","cold","холодный","춥다","chupda","بارد","barid","Sifatlar"],["tez","fast","быстрый","빠르다","ppareuda","سريع","sariʿ","Sifatlar"],["sekin","slow","медленный","느리다","neurida","بطيء","bati'","Sifatlar"],["uzun","long","длинный","길다","gilda","طويل","tawil","Sifatlar"],["qisqa","short","короткий","짧다","jjalda","قصير","qasir","Sifatlar"],["baland","tall","высокий","높다","nopda","عالي","ʿali","Sifatlar"],["past","low","низкий","낮다","natda","منخفض","munkhafid","Sifatlar"],["og'ir","heavy","тяжёлый","무겁다","mugeopda","ثقيل","thaqil","Sifatlar"],["yengil","light","лёгкий","가볍다","gabyeopda","خفيف","khafif","Sifatlar"],["qimmat","expensive","дорогой","비싸다","bissada","غالي","ghali","Sifatlar"],["arzon","cheap","дешёвый","싸다","ssada","رخيص","rakhis","Sifatlar"],["oson","easy","простой","쉽다","swipda","سهل","sahl","Sifatlar"],["qiyin","difficult","трудный","어렵다","eoryeopda","صعب","saʿb","Sifatlar"],["baxtli","happy","счастливый","행복하다","haengbokada","سعيد","saʿid","Sifatlar"],["xafa","sad","грустный","슬프다","seulpeuda","حزين","hazin","Sifatlar"],["charchagan","tired","уставший","피곤하다","pigonhada","متعب","mutʿab","Sifatlar"],["toza","clean","чистый","깨끗하다","kkaekkeutada","نظيف","nazif","Sifatlar"],["iflos","dirty","грязный","더럽다","deoreopda","وسخ","wasikh","Sifatlar"],["mazali","delicious","вкусный","맛있다","masitda","لذيذ","ladhidh","Sifatlar"],["yosh","young","молодой","젊다","jeolmda","شاب","shabb","Sifatlar"],["boy","rich","богатый","부자","buja","غني","ghani","Sifatlar"],["quyosh","sun","солнце","태양","taeyang","شمس","shams","Tabiat"],["oy (osmonda)","moon","луна","달","dal","قمر","qamar","Tabiat"],["yulduz","star","звезда","별","byeol","نجمة","najma","Tabiat"],["osmon","sky","небо","하늘","haneul","سماء","sama'","Tabiat"],["yer","earth","земля","땅","ttang","أرض","ard","Tabiat"],["dengiz","sea","море","바다","bada","بحر","bahr","Tabiat"],["daryo","river","река","강","gang","نهر","nahr","Tabiat"],["tog'","mountain","гора","산","san","جبل","jabal","Tabiat"],["o'rmon","forest","лес","숲","sup","غابة","ghaba","Tabiat"],["gul","flower","цветок","꽃","kkot","زهرة","zahra","Tabiat"],["daraxt","tree","дерево","나무","namu","شجرة","shajara","Tabiat"],["yomg'ir","rain","дождь","비","bi","مطر","matar","Tabiat"],["shamol","wind","ветер","바람","baram","ريح","rih","Tabiat"],["olov","fire","огонь","불","bul","نار","nar","Tabiat"],["ob-havo","weather","погода","날씨","nalssi","طقس","taqs","Tabiat"],["bulut","cloud","облако","구름","gureum","سحابة","sahaba","Tabiat"],["pasport","passport","паспорт","여권","yeogwon","جواز سفر","jawaz safar","Sayohat va sog'liq"],["viza","visa","виза","비자","bija","تأشيرة","ta'shira","Sayohat va sog'liq"],["chamadon","suitcase","чемодан","여행 가방","yeohaeng gabang","حقيبة سفر","haqibat safar","Sayohat va sog'liq"],["xarita","map","карта","지도","jido","خريطة","kharita","Sayohat va sog'liq"],["narx","price","цена","가격","gagyeok","سعر","siʿr","Sayohat va sog'liq"],["chegirma","discount","скидка","할인","harin","خصم","khasm","Sayohat va sog'liq"],["naqd pul","cash","наличные","현금","hyeongeum","نقدا","naqdan","Sayohat va sog'liq"],["bank kartasi","bank card","банковская карта","카드","kadeu","بطاقة","bitaqa","Sayohat va sog'liq"],["tez yordam","ambulance","скорая помощь","구급차","gugeupcha","إسعاف","isʿaf","Sayohat va sog'liq"],["dori","medicine","лекарство","약","yak","دواء","dawa","Sayohat va sog'liq"],["og'riq","pain","боль","통증","tongjeung","ألم","alam","Sayohat va sog'liq"],["kasal","sick","больной","아프다","apeuda","مريض","marid","Sayohat va sog'liq"],["sog'liq","health","здоровье","건강","geongang","صحة","sihha","Sayohat va sog'liq"],["sevgi","love","любовь","사랑","sarang","حب","hubb","His-tuyg'u va tushunchalar"],["baxt","happiness","счастье","행복","haengbok","سعادة","saʿada","His-tuyg'u va tushunchalar"],["orzu","dream","мечта","꿈","kkum","حلم","hulm","His-tuyg'u va tushunchalar"],["dunyo","world","мир","세계","segye","عالم","ʿalam","His-tuyg'u va tushunchalar"],["hayot","life","жизнь","삶","salm","حياة","hayat","His-tuyg'u va tushunchalar"],["do'stlik","friendship","дружба","우정","ujeong","صداقة","sadaqa","His-tuyg'u va tushunchalar"],["haqiqat","truth","правда","진실","jinsil","حقيقة","haqiqa","His-tuyg'u va tushunchalar"],["bilim","knowledge","знание","지식","jisik","معرفة","maʿrifa","His-tuyg'u va tushunchalar"],["kuch","strength","сила","힘","him","قوة","quwwa","His-tuyg'u va tushunchalar"],["yordam","help","помощь","도움","doum","مساعدة","musaʿada","His-tuyg'u va tushunchalar"],["muammo","problem","проблема","문제","munje","مشكلة","mushkila","His-tuyg'u va tushunchalar"],["fikr","idea","идея","아이디어","aidieo","فكرة","fikra","His-tuyg'u va tushunchalar"],["sabr","patience","терпение","인내","innae","صبر","sabr","His-tuyg'u va tushunchalar"],["va","and","и","그리고","geurigo","و","wa","Boshqa so'zlar"],["lekin","but","но","하지만","hajiman","لكن","lakin","Boshqa so'zlar"],["yoki","or","или","또는","ttoneun","أو","aw","Boshqa so'zlar"],["juda","very","очень","매우","maeu","جدا","jiddan","Boshqa so'zlar"],["ko'p","many","много","많다","manta","كثير","kathir","Boshqa so'zlar"],["oz","few","мало","적다","jeokda","قليل","qalil","Boshqa so'zlar"],["hamma","all","все","모두","modu","كل","kull","Boshqa so'zlar"],["men","I","я","나","na","أنا","ana","Boshqa so'zlar"],["sen","you","ты","너","neo","أنت","anta","Boshqa so'zlar"],["u (shaxs)","he","он","그","geu","هو","huwa","Boshqa so'zlar"],["biz","we","мы","우리","uri","نحن","nahnu","Boshqa so'zlar"],["ular","they","они","그들","geudeul","هم","hum","Boshqa so'zlar"],["bu","this","это","이것","igeot","هذا","hadha","Boshqa so'zlar"],["ichida","in","в","안에","ane","في","fi","Boshqa so'zlar"],["ustida","on","на","위에","wie","على","ʿala","Boshqa so'zlar"],["bilan","with","с","함께","hamkke","مع","maʿa","Boshqa so'zlar"]];
+function packFor(id){
+  const out=[], seen=new Set(), t=Date.now();
+  MASTER.forEach((r,i)=>{
+    let tg='', rom='';
+    if(id==='en') tg=r[1]; else if(id==='ru') tg=r[2];
+    else if(id==='kr'){tg=r[3];rom=r[4];} else {tg=r[5];rom=r[6];}
+    const k=(tg||'').trim().toLowerCase(); if(!k||seen.has(k)) return; seen.add(k);
+    out.push({id:t+i,uz:r[0],tg:tg,rom:rom,group:r[7],added:new Date().toLocaleDateString()});
+  });
+  return out;
+}
+function escHtml(v){return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function norm(v){return (v||'').normalize('NFC').replace(/[\u064B-\u065F\u0670]/g,'').replace(/[.!?؟,،…]+$/,'').replace(/\s+/g,' ').trim().toLowerCase();}
+function hexA(h,a){const n=parseInt(h.slice(1),16);return 'rgba('+(n>>16&255)+','+(n>>8&255)+','+(n&255)+','+a+')';}
+function fmtSum(n){return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,' ')+" so'm";}
+
+// ═══════════════════════════════════════════════
+// PREMIUM TO'LOV (karta orqali, admin tasdiqlaydi)
+// Quyidagi 3 qatorni O'ZINGIZNING ma'lumotlaringiz bilan almashtiring!
+// ═══════════════════════════════════════════════
+const PAY = {
+  card: '0000 0000 0000 0000',   // ← karta raqamingiz
+  owner: 'ISM FAMILIYA',          // ← karta egasi
+  telegram: '@username',          // ← chek yuboriladigan Telegram
+  plans: [
+    { id:'m1',  months:1,  price:19000,  label:'1 oy' },
+    { id:'m6',  months:6,  price:89000,  label:'6 oy',  tag:'-22%' },
+    { id:'m12', months:12, price:149000, label:'12 oy', tag:'-35%' },
+  ]
+};
+let selPlan = 'm6';
+function isPremium(){ return userProfile.plan==='premium' && (!userProfile.premiumUntil || new Date(userProfile.premiumUntil) > new Date()); }
+function payReady(){ return !/^0+$/.test(PAY.card.replace(/\s/g,'')); }
+
+function renderPlans(){
+  document.getElementById('planList').innerHTML = PAY.plans.map(p=>`
+    <div class="plan ${p.id===selPlan?'sel':''}" onclick="selectPlan('${p.id}')">
+      ${p.tag?`<span class="pl-t">${p.tag}</span>`:''}
+      <div class="pl-m">${p.label}</div><div class="pl-p">${fmtSum(p.price)}</div>
+    </div>`).join('');
+}
+function selectPlan(id){ selPlan=id; renderPlans(); renderPayBox(); }
+async function openPremiumModal(){
+  if (isPremium()) { toast('⭐ Premium faol'+(userProfile.premiumUntil?' — '+new Date(userProfile.premiumUntil).toLocaleDateString()+' gacha':''),'gold'); return; }
+  renderPlans();
+  document.getElementById('premiumModal').classList.add('open');
+  renderPayBox();
+}
+function closePremiumModal(){ document.getElementById('premiumModal').classList.remove('open'); }
+async function renderPayBox(){
+  const box=document.getElementById('payBox'); if(!box) return;
+  const plan=PAY.plans.find(p=>p.id===selPlan);
+  if(!payReady()){ box.innerHTML='<div class="pay-pending">💳 To\'lov tizimi sozlanmoqda. Tez orada ishga tushadi.</div>'; return; }
+  let pending=null;
+  if(sb && currentUser){
+    try{ const {data}=await sb.from('payments').select('status,months,created_at').eq('user_id',currentUser.id).order('created_at',{ascending:false}).limit(1); if(data&&data[0]&&data[0].status==='pending') pending=data[0]; }catch(e){}
+  }
+  box.innerHTML = `
+    <div class="pay-step"><b>1.</b> Quyidagi kartaga <b style="color:var(--gold)">${fmtSum(plan.price)}</b> o'tkazing:</div>
+    <div class="card-num"><span>${escHtml(PAY.card)}</span><button class="btn btn-ghost btn-sm" onclick="copyCard()">📋</button></div>
+    <div style="font-size:.74rem;color:var(--muted);margin-top:4px">${escHtml(PAY.owner)}</div>
+    <div class="pay-step"><b>2.</b> Chekni <b>${escHtml(PAY.telegram)}</b> ga yuboring.</div>
+    <div class="pay-step"><b>3.</b> Telegram username yoki telefon raqamingizni yozib, tugmani bosing:</div>
+    <input type="text" id="payNote" placeholder="@username yoki +998..." style="margin-bottom:10px">
+    <button class="btn btn-gold" style="width:100%" onclick="submitPayment()">✅ To'lov qildim</button>
+    ${pending?`<div class="pay-pending">⏳ Oldingi so'rovingiz (${pending.months} oy) ko'rib chiqilmoqda. Admin tasdiqlagach Premium yoqiladi.</div>`:''}`;
+}
+function copyCard(){ try{ navigator.clipboard.writeText(PAY.card.replace(/\s/g,'')); toast('📋 Karta raqami nusxalandi','ok'); }catch(e){ toast(PAY.card,'ok'); } }
+async function submitPayment(){
+  const plan=PAY.plans.find(p=>p.id===selPlan);
+  const note=(document.getElementById('payNote')?.value||'').trim();
+  if(!note){ toast("Telegram username yoki telefon raqamingizni yozing",'err'); return; }
+  if(!sb||!currentUser){ toast("Tizimga qaytadan kiring",'err'); return; }
+  const {error}=await sb.from('payments').insert({user_id:currentUser.id,email:userProfile.email,months:plan.months,amount:plan.price,note:note});
+  if(error){ toast("Xatolik: "+error.message,'err'); return; }
+  toast("✅ So'rov yuborildi! Admin tasdiqlagach Premium yoqiladi",'ok');
+  renderPayBox();
+}
+async function loadPayments(){
+  const el=document.getElementById('paymentsList'); if(!el) return;
+  if(!sb){ el.innerHTML='<div style="color:var(--muted);font-size:.8rem">Supabase ulanmagan</div>'; return; }
+  const {data,error}=await sb.from('payments').select('*').eq('status','pending').order('created_at',{ascending:true});
+  if(error){ el.innerHTML='<div style="color:var(--danger);font-size:.8rem">'+escHtml(error.message)+' — supabase_setup.sql ni qayta ishga tushiring</div>'; return; }
+  if(!data.length){ el.innerHTML='<div style="color:var(--muted);font-size:.8rem">Yangi so\'rov yo\'q</div>'; return; }
+  el.innerHTML=data.map(p=>`<div class="pay-row"><div style="flex:1;min-width:0"><b style="font-size:.85rem">${escHtml(p.email||'')}</b><div class="pay-meta">${p.months} oy · ${fmtSum(p.amount)} · ${escHtml(p.note||'')} · ${new Date(p.created_at).toLocaleString()}</div></div><button class="btn btn-gold btn-sm" onclick="approvePayment(${Number(p.id)})">✅ Tasdiqlash</button><button class="btn btn-danger btn-sm" onclick="rejectPayment(${Number(p.id)})">✕</button></div>`).join('');
+}
+async function approvePayment(id){
+  const {error}=await sb.rpc('admin_approve_payment',{pid:id});
+  if(error){ toast('Xatolik: '+error.message,'err'); return; }
+  toast('✅ Premium yoqildi','ok'); loadAdminData();
+}
+async function rejectPayment(id){
+  if(!confirm("So'rovni rad etasizmi?")) return;
+  const {error}=await sb.from('payments').update({status:'rejected'}).eq('id',id);
+  if(error){ toast('Xatolik: '+error.message,'err'); return; }
+  toast("Rad etildi",'ok'); loadPayments();
+}
+
 function renderUserBar() {
   const bar = document.getElementById('userBar');
   const isAdmin = userProfile.email === ADMIN_EMAIL;
@@ -905,7 +1063,7 @@ function renderUserBar() {
     <div class="user-avatar">${avatarContent}</div>
     <div style="flex:1;min-width:0">
       <div class="user-name" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${userProfile.name||'Foydalanuvchi'}</div>
-      <div class="user-plan">${userProfile.plan==='premium'?'⭐ Premium':'🆓 Free'}</div>
+      <div class="user-plan">${isPremium()?'⭐ Premium':'🆓 Free'}</div>
     </div>
     <div class="streak-badge">🔥 ${userProfile.streak||0} kun</div>
     ${isAdmin?`<button class="admin-btn" onclick="showAdmin()">⚙️ Admin</button>`:''}
@@ -917,21 +1075,18 @@ function renderUserBar() {
 // ═══════════════════════════════════════════════
 function renderPremiumBanner() {
   const wrap = document.getElementById('premiumBannerWrap');
-  if (userProfile.plan === 'premium') { wrap.innerHTML=''; return; }
+  if (isPremium()) { wrap.innerHTML=''; return; }
   wrap.innerHTML = `<div class="premium-banner">
     <span class="pb-icon">⭐</span>
     <div class="pb-text">
       <div class="pb-title">Premium rejimga o'ting!</div>
-      <div class="pb-sub">Cheksiz so'zlar · Reklama yo'q · Statistika · Maxsus mavzular</div>
+      <div class="pb-sub">Reklamasiz foydalanish · Loyihani qo'llab-quvvatlash</div>
     </div>
     <button class="pb-btn" onclick="upgradePremium()">Yangilash →</button>
   </div>`;
 }
 
-function upgradePremium() {
-  // Placeholder — real payment via Payme/Click/Stripe
-  toast("💳 To'lov tizimi tez orada qo'shiladi!", 'gold');
-}
+function upgradePremium() { openPremiumModal(); }
 
 function renderProgressCard() {
   const wrap = document.getElementById('progressCardWrap');
@@ -947,7 +1102,7 @@ function renderProgressCard() {
 }
 
 async function renderCurrentAd() {
-  if (userProfile.plan === 'premium') return;
+  if (isPremium()) return;
   let ad = JSON.parse(localStorage.getItem('az_current_ad')||'null');
   if (sb) {
     try {
@@ -987,11 +1142,22 @@ function renderLangGrid() {
   if (urlLang && LANGS[urlLang]) selectLang(urlLang);
 }
 
-function selectLang(id) {
+async function selectLang(id) {
   activeLang = LANGS[id];
   const uid = currentUser?.id || currentUser?.uid || 'local';
   words = JSON.parse(localStorage.getItem(`az_words_${id}_${uid}`)||'[]');
   stats = JSON.parse(localStorage.getItem(`az_stats_${id}_${uid}`)||'{"correct":0,"wrong":0}');
+  const seedKey = `az_seeded_${id}_${uid}`;
+  let justSeeded = false;
+  if (!words.length && sb && currentUser) {
+    try {
+      const { data } = await sb.from('user_words').select('words,stats').eq('user_id', uid).eq('lang', id).maybeSingle();
+      if (data && data.words && data.words.length) { words = data.words; if (data.stats) stats = data.stats; localStorage.setItem(seedKey,'1'); }
+    } catch(e) {}
+  }
+  if (!words.length && !localStorage.getItem(seedKey)) {
+    words = packFor(id); localStorage.setItem(seedKey,'1'); justSeeded = true;
+  }
   applyTheme(activeLang);
   buildUI(activeLang);
   renderUserBar();
@@ -1001,6 +1167,7 @@ function selectLang(id) {
   renderWordList();
   populateGroupSelects();
   showScreen('appScreen');
+  if (justSeeded) save(false);
   setTimeout(renderCurrentAd, 500);
 }
 
@@ -1019,6 +1186,8 @@ function applyTheme(lang) {
   r.setProperty('--tab-shadow', lang.accent+'55');
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', lang.accent);
   document.getElementById('flagStripe').style.background = lang.flagStripe;
+  document.getElementById('flagWash').style.background = lang.flagStripe;
+  r.setProperty('--glow', hexA(lang.accent,.30));
   document.getElementById('silhouetteContent').innerHTML = SILHOUETTES[lang.silhouette]||'';
   startParticles(lang.particles,'rgba(255,255,255,0.12)',lang.id==='ru'?28:lang.id==='kr'?22:18);
   document.getElementById('appTitle').textContent = `AZ_${lang.name.split(' ')[0]}Learning`;
@@ -1076,7 +1245,7 @@ function showTab(name,btn){
 // ═══════════════════════════════════════════════
 // DATA SAVE
 // ═══════════════════════════════════════════════
-function save() {
+function save(count=true) {
   if (!activeLang||!currentUser) return;
   const uid = currentUser.id||currentUser.uid||'local';
   localStorage.setItem(`az_words_${activeLang.id}_${uid}`, JSON.stringify(words));
@@ -1090,7 +1259,7 @@ function save() {
       updated_at: new Date().toISOString()
     }).then(()=>{},()=>{});
   }
-  userProfile.dailyDone = (userProfile.dailyDone||0)+1;
+  if (count) userProfile.dailyDone = (userProfile.dailyDone||0)+1;
   saveUserProfile();
   updateStats();
   renderProgressCard();
@@ -1115,7 +1284,7 @@ function addWord(){
   if(!uz||!tg){toast("So'z va tarjimani kiriting!",'err');return;}
   if(words.find(w=>w.tg===tg)){toast("Bu so'z allaqachon bor!",'err');return;}
   words.push({id:Date.now(),uz,tg,rom,group,added:new Date().toLocaleDateString()});
-  save();renderWordList();populateGroupSelects();
+  save(false);renderWordList();populateGroupSelects();
   document.getElementById('uzInput').value='';document.getElementById('tgInput').value='';
   if(document.getElementById('romInput'))document.getElementById('romInput').value='';
   toast("✅ So'z qo'shildi!",'ok');
@@ -1133,11 +1302,16 @@ function renderWordList(){
   const isAr=activeLang?.id==='ar';
   list.innerHTML=f.map(w=>`<div class="word-item"><span class="wi-uz">🇺🇿 ${w.uz}</span><span class="wi-target" ${isAr?'dir="rtl"':''}>${activeLang?.flag||''} ${w.tg}</span>${w.rom?`<span class="wi-rom">[${w.rom}]</span>`:''}<span class="wi-group">${w.group}</span><button class="btn btn-sm btn-danger del-btn" onclick="deleteWord(${w.id})">✕</button></div>`).join('');
 }
-function deleteWord(id){words=words.filter(w=>w.id!==id);save();renderWordList();populateGroupSelects();toast("O'chirildi",'ok');}
-function clearAllWords(){if(!confirm("Barcha so'zlarni o'chirishni xohlaysizmi?"))return;words=[];save();renderWordList();populateGroupSelects();toast("O'chirildi",'err');}
-function addSampleWords(){(activeLang?.samples||[]).forEach(s=>{if(!words.find(w=>w.tg===s.tg))words.push({id:Date.now()+Math.random(),uz:s.uz,tg:s.tg,rom:s.rom||'',group:s.group,added:new Date().toLocaleDateString()});});save();renderWordList();populateGroupSelects();toast("📦 Namuna so'zlar qo'shildi!",'ok');}
+function deleteWord(id){words=words.filter(w=>w.id!==id);save(false);renderWordList();populateGroupSelects();toast("O'chirildi",'ok');}
+function clearAllWords(){if(!confirm("Barcha so'zlarni o'chirishni xohlaysizmi?"))return;words=[];save(false);renderWordList();populateGroupSelects();toast("O'chirildi",'err');}
+function addSampleWords(){
+  const have=new Set(words.map(w=>(w.tg||'').trim().toLowerCase())); let n=0;
+  packFor(activeLang.id).forEach(w=>{ if(!have.has(w.tg.trim().toLowerCase())){ words.push(w); n++; } });
+  save(false); renderWordList(); populateGroupSelects();
+  toast(n?('📦 '+n+" ta so'z qo'shildi!"):"To'plam allaqachon to'liq qo'shilgan",'ok');
+}
 function exportWords(){const b=new Blob([JSON.stringify(words,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`az_${activeLang?.id}_words.json`;a.click();toast("💾 Export qilindi!",'ok');}
-function importWords(e){const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=ev=>{try{const imp=JSON.parse(ev.target.result);if(Array.isArray(imp)){imp.forEach(w=>{if(w.uz&&w.tg&&!words.find(x=>x.tg===w.tg))words.push({id:Date.now()+Math.random(),uz:w.uz,tg:w.tg,rom:w.rom||'',group:w.group||'Umumiy',added:new Date().toLocaleDateString()});});save();renderWordList();populateGroupSelects();toast("✅ Import qilindi!",'ok');}}catch{toast('Fayl xatosi!','err');}};r.readAsText(file);e.target.value='';}
+function importWords(e){const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=ev=>{try{const imp=JSON.parse(ev.target.result);if(Array.isArray(imp)){imp.forEach(w=>{if(w.uz&&w.tg&&!words.find(x=>x.tg===w.tg))words.push({id:Date.now()+Math.random(),uz:w.uz,tg:w.tg,rom:w.rom||'',group:w.group||'Umumiy',added:new Date().toLocaleDateString()});});save(false);renderWordList();populateGroupSelects();toast("✅ Import qilindi!",'ok');}}catch{toast('Fayl xatosi!','err');}};r.readAsText(file);e.target.value='';}
 function populateGroupSelects(){const groups=[...new Set(words.map(w=>w.group))];['groupFilter','quizGroup','listenGroup','imloGroup'].forEach(id=>{const el=document.getElementById(id);if(!el)return;const val=el.value;el.innerHTML=`<option value="">${id==='groupFilter'?'Barcha guruhlar':'Hammasi'}</option>`;groups.forEach(g=>el.innerHTML+=`<option value="${g}">${g}</option>`);el.value=val;});}
 
 // ═══════════════════════════════════════════════
@@ -1176,7 +1350,7 @@ function renderQuiz(){
 }
 function esc(s){return(s||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');}
 function checkMCQ(btn,sel,ans){document.querySelectorAll('.option-btn').forEach(b=>b.disabled=true);const fb=document.getElementById('feedback');if(sel===ans){btn.classList.add('correct');fb.className='feedback fb-ok';fb.textContent="✅ To'g'ri!";stats.correct++;quizScore++;}else{btn.classList.add('wrong');document.querySelectorAll('.option-btn').forEach(b=>{if(b.textContent.includes(ans))b.classList.add('correct');});fb.className='feedback fb-err';fb.innerHTML=`❌ Noto'g'ri! To'g'ri: <strong>${ans}</strong>`;stats.wrong++;}fb.style.display='block';document.getElementById('nextBtn').style.display='inline-block';save();}
-function checkType(){const input=document.getElementById('typeInput');const val=input.value.trim();if(!val)return;const w=quizWords[quizIndex];const dir=quizConfig.direction==='random'?'uz-tg':quizConfig.direction;const{a}=getQA(w,dir);const fb=document.getElementById('feedback');input.disabled=true;document.querySelector('.qz-text-input .btn')?.setAttribute('disabled',true);if(val.toLowerCase()===a.toLowerCase()){fb.className='feedback fb-ok';fb.textContent="✅ To'g'ri!";stats.correct++;quizScore++;}else{fb.className='feedback fb-err';fb.innerHTML=`❌ Noto'g'ri! <strong>${a}</strong>`;stats.wrong++;}fb.style.display='block';document.getElementById('nextBtn').style.display='inline-block';save();}
+function checkType(){const input=document.getElementById('typeInput');const val=input.value.trim();if(!val)return;const w=quizWords[quizIndex];const dir=quizConfig.direction==='random'?'uz-tg':quizConfig.direction;const{a}=getQA(w,dir);const fb=document.getElementById('feedback');input.disabled=true;document.querySelector('.qz-text-input .btn')?.setAttribute('disabled',true);if(norm(val)===norm(a)){fb.className='feedback fb-ok';fb.textContent="✅ To'g'ri!";stats.correct++;quizScore++;}else{fb.className='feedback fb-err';fb.innerHTML=`❌ Noto'g'ri! <strong>${a}</strong>`;stats.wrong++;}fb.style.display='block';document.getElementById('nextBtn').style.display='inline-block';save();}
 function nextQuestion(){quizIndex++;renderQuiz();}
 
 // ═══════════════════════════════════════════════
@@ -1191,12 +1365,12 @@ area.innerHTML=`<div class="card listen-card"><div style="font-size:0.65rem;colo
 setTimeout(()=>document.getElementById('listenInput')?.focus(),150);}
 function triggerSpeak(){const w=listenWords[listenIndex];if(!w)return;const rate=parseFloat(document.getElementById('speechRate').value)||1;const btn=document.getElementById('speakBtn');if(btn){btn.classList.remove('ready');btn.classList.add('speaking');btn.textContent='🎵';}doSpeak(w.tg,rate,activeLang?.speechLang||'en-US',()=>{if(btn){btn.classList.remove('speaking');btn.classList.add('ready');btn.textContent='🔊';}});}
 function toggleHint(){const h=document.getElementById('hintText'),b=document.getElementById('hintBtn');if(h.style.display==='none'){h.style.display='inline';b.textContent="🙈 Yashirish";}else{h.style.display='none';b.textContent="💡 Ko'rsatish";}}
-function checkListen(){const input=document.getElementById('listenInput');const val=input.value.trim();if(!val)return;const w=listenWords[listenIndex];const fb=document.getElementById('listenFb'),reveal=document.getElementById('listenReveal');input.disabled=true;document.querySelector('.listen-answer .btn')?.setAttribute('disabled',true);if(val.toLowerCase()===w.tg.toLowerCase()){fb.className='feedback fb-ok';fb.textContent="✅ To'g'ri!";stats.correct++;}else{fb.className='feedback fb-err';fb.innerHTML=`❌ Noto'g'ri! <strong>${w.tg}</strong>${w.rom?' ['+w.rom+']':''}`;stats.wrong++;}fb.style.display='block';save();reveal.innerHTML=`<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px"><button class="btn btn-ghost" onclick="triggerSpeak()">🔊 Yana</button><button class="btn btn-primary" onclick="listenIndex++;renderListen()">Keyingisi →</button></div>`;}
+function checkListen(){const input=document.getElementById('listenInput');const val=input.value.trim();if(!val)return;const w=listenWords[listenIndex];const fb=document.getElementById('listenFb'),reveal=document.getElementById('listenReveal');input.disabled=true;document.querySelector('.listen-answer .btn')?.setAttribute('disabled',true);if(norm(val)===norm(w.tg)){fb.className='feedback fb-ok';fb.textContent="✅ To'g'ri!";stats.correct++;}else{fb.className='feedback fb-err';fb.innerHTML=`❌ Noto'g'ri! <strong>${w.tg}</strong>${w.rom?' ['+w.rom+']':''}`;stats.wrong++;}fb.style.display='block';save();reveal.innerHTML=`<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px"><button class="btn btn-ghost" onclick="triggerSpeak()">🔊 Yana</button><button class="btn btn-primary" onclick="listenIndex++;renderListen()">Keyingisi →</button></div>`;}
 
 // ═══════════════════════════════════════════════
 // IMLO
 // ═══════════════════════════════════════════════
-function startImlo(){if(words.length<2){toast("Kamida 2 ta so'z kerak!",'err');return;}const group=document.getElementById('imloGroup').value,count=parseInt(document.getElementById('imloCount').value)||10;let pool=group?words.filter(w=>w.group===group):[...words];if(pool.length<2){toast("Yetarli so'z yo'q!",'err');return;}imloWords=pool.sort(()=>Math.random()-0.5).slice(0,Math.min(count,pool.length));imloIndex=0;imloResults=[];renderImlo();}
+function startImlo(){if(words.length<2){toast("Kamida 2 ta so'z kerak!",'err');return;}const group=document.getElementById('imloGroup').value,count=parseInt(document.getElementById('imloCount').value)||10;let pool=group?words.filter(w=>w.group===group):[...words];pool=pool.filter(w=>{const n=[...w.tg].length;return n>=2&&n<=12&&!/\s/.test(w.tg);});if(pool.length<2){toast("Yetarli so'z yo'q!",'err');return;}imloWords=pool.sort(()=>Math.random()-0.5).slice(0,Math.min(count,pool.length));imloIndex=0;imloResults=[];renderImlo();}
 function shuffleArr(arr){const a=[...arr];for(let i=0;i<20;i++){a.sort(()=>Math.random()-0.5);if(a.join('')!==arr.join(''))break;}return a;}
 function renderImlo(){const area=document.getElementById('imloArea');if(imloIndex>=imloWords.length){const c=imloResults.filter(r=>r).length,pct=Math.round(c/imloWords.length*100),emoji=pct>=80?'🏆':pct>=60?'👍':'💪';area.innerHTML=`<div class="card"><div class="score-display"><div style="font-size:2.5rem">${emoji}</div><div class="score-big">${pct}%</div><div class="score-label">${c}/${imloWords.length}</div><div class="imlo-dots">${imloResults.map(r=>`<div class="imlo-dot ${r?'d-ok':'d-err'}"></div>`).join('')}</div><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px"><button class="btn btn-primary" onclick="startImlo()">🔄 Qayta</button><button class="btn btn-ghost" onclick="document.getElementById('imloArea').innerHTML=''">✕</button></div></div></div>`;return;}
 const w=imloWords[imloIndex];imloLetters=shuffleArr([...w.tg]);imloAnswer=[];imloUsed=new Array(imloLetters.length).fill(false);
@@ -1221,6 +1395,7 @@ function showAdmin() {
 
 async function loadAdminData() {
   let usersList = [];
+  loadPayments();
 
   if (sb) {
     try {
@@ -1245,28 +1420,39 @@ async function loadAdminData() {
     <div class="admin-stat-card"><div class="asc-num" style="color:var(--success)">${usersList.reduce((s,u)=>s+(u.streak||0),0)}</div><div class="asc-lbl">Jami streak</div></div>
     <div class="admin-stat-card"><div class="asc-num" style="color:var(--accent3)">${usersList.reduce((s,u)=>s+(u.daily_done||0),0)}</div><div class="asc-lbl">Jami sessiyalar</div></div>`;
 
-  // Lang chart
+  // Til bo'yicha foydalanuvchilar — HAQIQIY ma'lumot (admin_lang_stats)
   const langColors = { en:'#7c5cfc', ru:'#cc2222', kr:'#cd2e3a', ar:'#1b7a3e' };
   const langNames = { en:'🇬🇧 Ingliz', ru:'🇷🇺 Rus', kr:'🇰🇷 Koreys', ar:'🇸🇦 Arab' };
-  const langCounts = { en: Math.floor(totalUsers*0.45), ru: Math.floor(totalUsers*0.28), kr: Math.floor(totalUsers*0.18), ar: Math.floor(totalUsers*0.09) };
-  const maxC = Math.max(...Object.values(langCounts), 1);
-  document.getElementById('langChart').innerHTML = Object.entries(langCounts).map(([id,c])=>`
-    <div class="chart-bar-item">
-      <div class="cbi-lbl">${langNames[id]}</div>
-      <div class="cbi-bar"><div class="cbi-fill" style="width:${Math.round(c/maxC*100)}%;background:${langColors[id]}"></div></div>
-      <div class="cbi-val">${c}</div>
-    </div>`).join('');
+  const langRows = {}; let langErr = '';
+  if (sb) {
+    const { data, error } = await sb.rpc('admin_lang_stats');
+    if (error) langErr = error.message;
+    else (data||[]).forEach(r=>{ langRows[r.lang] = { users:Number(r.users), words:Number(r.total_words) }; });
+  }
+  if (langErr) {
+    document.getElementById('langChart').innerHTML = '<div style="color:var(--danger);font-size:.8rem">'+escHtml(langErr)+' — supabase_setup.sql ni qayta ishga tushiring</div>';
+  } else {
+    const maxC = Math.max(1, ...Object.keys(langNames).map(id=>(langRows[id]||{}).users||0));
+    document.getElementById('langChart').innerHTML = Object.keys(langNames).map(id=>{
+      const c=(langRows[id]||{}).users||0, w=(langRows[id]||{}).words||0;
+      return `<div class="chart-bar-item">
+        <div class="cbi-lbl">${langNames[id]}</div>
+        <div class="cbi-bar"><div class="cbi-fill" style="width:${Math.round(c/maxC*100)}%;background:${langColors[id]}"></div></div>
+        <div class="cbi-val">${c} <span style="color:var(--muted);font-size:.6rem">· ${w} so'z</span></div>
+      </div>`; }).join('');
+  }
 
   // Users table
-  document.getElementById('usersBody').innerHTML = usersList.slice(0,20).map(u=>`
-    <tr>
-      <td>${u.name||'—'}</td>
-      <td style="font-size:0.75rem;color:var(--muted)">${u.email||'—'}</td>
-      <td><span class="plan-badge plan-${u.plan||'free'}">${u.plan||'free'}</span></td>
-      <td>${u.wordCount||0}</td>
+  document.getElementById('usersBody').innerHTML = usersList.slice(0,50).map(u=>{
+    const prem = u.plan==='premium' && (!u.premium_until || new Date(u.premium_until)>new Date());
+    return `<tr>
+      <td>${escHtml(u.name||'—')}</td>
+      <td style="font-size:0.75rem;color:var(--muted)">${escHtml(u.email||'—')}</td>
+      <td><span class="plan-badge plan-${prem?'premium':'free'}">${prem?'premium':'free'}</span></td>
+      <td style="font-size:.72rem">${u.premium_until?new Date(u.premium_until).toLocaleDateString():(prem?'∞':'—')}</td>
       <td>🔥 ${u.streak||0}</td>
-      <td><button class="btn btn-sm btn-ghost" onclick="togglePremiumUser('${u.email}')">${u.plan==='premium'?'Olish':'Berish'}</button></td>
-    </tr>`).join('');
+      <td><button class="btn btn-sm btn-ghost" data-email="${escHtml(u.email||'')}" onclick="togglePremiumUser(this.dataset.email)">${prem?'Olish':'Berish'}</button></td>
+    </tr>`; }).join('');
 
   // Current ad preview
   const ad = JSON.parse(localStorage.getItem('az_current_ad')||'null');
@@ -1291,7 +1477,7 @@ async function togglePremiumUser(email) {
     const { data } = await sb.from('profiles').select('id,plan').eq('email', email).single();
     if (data) {
       const newPlan = data.plan === 'premium' ? 'free' : 'premium';
-      await sb.from('profiles').update({ plan: newPlan }).eq('email', email);
+      await sb.from('profiles').update({ plan: newPlan, premium_until: null }).eq('email', email);
     }
   }
   toast(`✅ ${email} rejimi yangilandi`, 'ok');
