@@ -458,6 +458,11 @@ body{background:radial-gradient(900px 520px at 50% -6%,var(--glow,rgba(124,92,25
 .pay-meta{font-size:.72rem;color:var(--muted);margin-top:2px;word-break:break-word;}
 @keyframes sheetUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
 </style>
+<style id="readable">
+:root{--muted:#8a93b4;}
+.auth-link{font-size:.85rem;color:#b4bbd6;margin-top:12px;}
+.auth-link span{color:#9ad0ff;font-weight:700;text-decoration:underline;padding:8px 6px;display:inline-block;cursor:pointer;}
+</style>
 </head>
 <body>
 <div id="splash"><img class="sp-img" src="logo.png" alt="AZ Learn"><div class="sp-name">LEARN</div></div>
@@ -685,6 +690,17 @@ body{background:radial-gradient(900px 520px at 50% -6%,var(--glow,rgba(124,92,25
   </div>
 </div>
 
+<div id="newPassModal" class="modal">
+  <div class="modal-box">
+    <div class="modal-title">🔑 Yangi parol</div>
+    <div class="modal-sub">Yangi parolni kiriting (kamida 6 ta belgi)</div>
+    <input type="password" id="newPass1" placeholder="Yangi parol" style="margin-bottom:10px">
+    <input type="password" id="newPass2" placeholder="Parolni takrorlang" style="margin-bottom:12px" onkeydown="if(event.key==='Enter')saveNewPassword()">
+    <button class="btn btn-primary" style="width:100%;margin-bottom:8px" onclick="saveNewPassword()">Saqlash</button>
+    <button class="btn btn-ghost" style="width:100%" onclick="closeNewPassModal()">Bekor qilish</button>
+  </div>
+</div>
+
 <div id="premiumModal" class="modal" onclick="if(event.target===this)closePremiumModal()">
   <div class="modal-box">
     <button class="modal-x" onclick="closePremiumModal()">✕</button>
@@ -710,6 +726,7 @@ const ADMIN_EMAIL = "azimbekusmonov0919@gmail.com";
 // ═══════════════════════════════════════════════
 // SUPABASE INIT
 // ═══════════════════════════════════════════════
+const RECOVERY_MODE = /type=recovery/.test(location.hash) || /type=recovery/.test(location.search);
 let sb = null;
 try {
   sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
@@ -821,6 +838,7 @@ function switchAuthTab(tab, btn) {
     if (session?.user) onUserLoggedIn(session.user);
     else showScreen('authScreen');
     sb.auth.onAuthStateChange((_event, session) => {
+      if (_event === 'PASSWORD_RECOVERY') { window.__recoveryShown = true; openNewPassModal(); }
       if (session?.user) { if (!currentUser || currentUser.id !== session.user.id) onUserLoggedIn(session.user); }
       else if (_event === 'SIGNED_OUT') { currentUser=null; showScreen('authScreen'); }
     });
@@ -837,6 +855,7 @@ function onUserLoggedIn(user) {
     startParticles(['·','✦','◇'],'rgba(255,255,255,0.06)',18);
     renderLangGrid();
     showScreen('langSelectScreen');
+    if (RECOVERY_MODE && !window.__recoveryShown) { window.__recoveryShown = true; openNewPassModal(); }
   });
 }
 
@@ -929,12 +948,12 @@ async function doGoogleLogin() {
 
 async function doResetPassword() {
   const email = document.getElementById('loginEmail').value.trim();
-  if (!email) { toast("Avval emailni kiriting",'err'); return; }
-  if (sb) {
-    const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo:location.origin+location.pathname });
-    if (error) toast("Xatolik: "+error.message,'err');
-    else toast("✅ Parol tiklash emaili yuborildi!",'ok');
-  }
+  if (!email) { toast("Avval yuqoridagi Email maydoniga emailingizni yozing, keyin «Tiklash» ni bosing",'err'); document.getElementById('loginEmail').focus(); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { toast("Email to'liq emas. Masalan: ism@gmail.com",'err'); document.getElementById('loginEmail').focus(); return; }
+  if (!sb) { toast("Bu funksiya internet va Supabase ulanganda ishlaydi",'err'); return; }
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo:location.origin+location.pathname });
+  if (error) toast("Xatolik: "+error.message,'err');
+  else toast("✅ Xat yuborildi! Pochtangizni (Spam papkasini ham) tekshiring",'ok');
 }
 
 function showAuthError(el, msg) { el.textContent=msg; el.style.display='block'; }
@@ -976,9 +995,9 @@ function fmtSum(n){return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,' ')+" so'm"
 // Quyidagi 3 qatorni O'ZINGIZNING ma'lumotlaringiz bilan almashtiring!
 // ═══════════════════════════════════════════════
 const PAY = {
-  card: '9860 1701 0690 8529',   // ← karta raqamingiz
-  owner: 'Azimbek Usmonov',          // ← karta egasi
-  telegram: '@Azimbeekjon',          // ← chek yuboriladigan Telegram
+  card: '0000 0000 0000 0000',   // ← karta raqamingiz
+  owner: 'ISM FAMILIYA',          // ← karta egasi
+  telegram: '@username',          // ← chek yuboriladigan Telegram
   plans: [
     { id:'m1',  months:1,  price:19000,  label:'1 oy' },
     { id:'m6',  months:6,  price:89000,  label:'6 oy',  tag:'-22%' },
@@ -1053,6 +1072,18 @@ async function rejectPayment(id){
   toast("Rad etildi",'ok'); loadPayments();
 }
 
+function openNewPassModal(){ document.getElementById('newPassModal').classList.add('open'); setTimeout(()=>document.getElementById('newPass1')?.focus(),100); }
+function closeNewPassModal(){ document.getElementById('newPassModal').classList.remove('open'); try{ history.replaceState(null,'',location.pathname); }catch(e){} }
+async function saveNewPassword(){
+  const p1=document.getElementById('newPass1').value, p2=document.getElementById('newPass2').value;
+  if (p1.length<6) { toast("Parol kamida 6 ta belgi bo'lsin",'err'); return; }
+  if (p1!==p2) { toast("Parollar bir xil emas",'err'); return; }
+  if (!sb) { toast("Ulanish yo'q",'err'); return; }
+  const { error } = await sb.auth.updateUser({ password:p1 });
+  if (error) { toast("Xatolik: "+error.message,'err'); return; }
+  toast("✅ Parol o'zgartirildi!",'ok'); closeNewPassModal();
+  document.getElementById('newPass1').value=''; document.getElementById('newPass2').value='';
+}
 function renderUserBar() {
   const bar = document.getElementById('userBar');
   const isAdmin = userProfile.email === ADMIN_EMAIL;
