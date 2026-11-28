@@ -318,7 +318,7 @@ select option { background:var(--surface); }
   --radius: 20px;
 }
 html{-webkit-tap-highlight-color:transparent;}
-body{font-family:var(--font-body);overscroll-behavior-y:none;-webkit-font-smoothing:antialiased;}
+body{font-family:var(--font-body);-webkit-font-smoothing:antialiased;}
 button,.btn,.tab-btn,.lang-card,.option-btn,.letter-box{-webkit-user-select:none;user-select:none;touch-action:manipulation;}
 
 /* Glass kartalar */
@@ -422,8 +422,8 @@ input[type="text"],input[type="email"],input[type="password"],select,textarea{mi
 </style>
 <style id="design-v4">
 /* ═══════════ DESIGN v4 ═══════════ */
-html,body{overflow-x:hidden;max-width:100%;}
-body{background:radial-gradient(900px 520px at 50% -6%,var(--glow,rgba(124,92,252,.25)),transparent 72%),var(--bg);background-attachment:fixed;}
+body{overflow-x:clip;}
+body{background:radial-gradient(900px 520px at 50% -6%,var(--glow,rgba(124,92,252,.25)),transparent 72%),var(--bg);}
 .header h1{font-size:clamp(1.1rem,6vw,1.9rem);overflow-wrap:anywhere;}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
 .stat-card{min-width:0;padding:10px 4px;}
@@ -462,6 +462,16 @@ body{background:radial-gradient(900px 520px at 50% -6%,var(--glow,rgba(124,92,25
 :root{--muted:#8a93b4;}
 .auth-link{font-size:.85rem;color:#b4bbd6;margin-top:12px;}
 .auth-link span{color:#9ad0ff;font-weight:700;text-decoration:underline;padding:8px 6px;display:inline-block;cursor:pointer;}
+</style>
+<style id="perf">
+.card,.progress-card,.stat-card,.admin-section,.auth-box,.admin-stat-card,.user-bar,.tabs,.lang-card,.modal{-webkit-backdrop-filter:none !important;backdrop-filter:none !important;}
+.card,.progress-card,.stat-card,.admin-section,.auth-box,.admin-stat-card{background:rgba(22,25,38,.78);}
+.user-bar{background:rgba(16,18,26,.97);}
+.tabs{background:rgba(16,18,26,.97);}
+.modal{background:rgba(4,5,10,.85);}
+#flagWash{filter:none !important;inset:0 !important;opacity:.22;}
+#bgSilhouette{-webkit-mask-image:none !important;mask-image:none !important;}
+.particle{will-change:transform;}
 </style>
 </head>
 <body>
@@ -987,6 +997,12 @@ function packFor(id){
 }
 function escHtml(v){return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function norm(v){return (v||'').normalize('NFC').replace(/[\u064B-\u065F\u0670]/g,'').replace(/[.!?؟,،…]+$/,'').replace(/\s+/g,' ').trim().toLowerCase();}
+const WASH={
+  en:'linear-gradient(135deg,#012169 0%,#ffffff 48%,#C8102E 100%)',
+  ru:'linear-gradient(180deg,#ffffff 0%,#0039A6 50%,#D52B1E 100%)',
+  kr:'linear-gradient(135deg,#ffffff 0%,#cd2e3a 48%,#003478 100%)',
+  ar:'linear-gradient(180deg,#006c35 0%,#0a8a45 62%,#ffffff 100%)'
+};
 function hexA(h,a){const n=parseInt(h.slice(1),16);return 'rgba('+(n>>16&255)+','+(n>>8&255)+','+(n&255)+','+a+')';}
 function fmtSum(n){return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,' ')+" so'm";}
 
@@ -1217,7 +1233,7 @@ function applyTheme(lang) {
   r.setProperty('--tab-shadow', lang.accent+'55');
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', lang.accent);
   document.getElementById('flagStripe').style.background = lang.flagStripe;
-  document.getElementById('flagWash').style.background = lang.flagStripe;
+  document.getElementById('flagWash').style.background = WASH[lang.id] || lang.flagStripe;
   r.setProperty('--glow', hexA(lang.accent,.30));
   document.getElementById('silhouetteContent').innerHTML = SILHOUETTES[lang.silhouette]||'';
   startParticles(lang.particles,'rgba(255,255,255,0.12)',lang.id==='ru'?28:lang.id==='kr'?22:18);
@@ -1258,6 +1274,7 @@ function buildAlphabetTab(lang) {
 // PARTICLES
 // ═══════════════════════════════════════════════
 function startParticles(chars,color,count) {
+  if (window.matchMedia && matchMedia('(max-width:700px)').matches) count = Math.min(count, 9);
   const c=document.getElementById('particles'); c.innerHTML='';
   for(let i=0;i<count;i++){const p=document.createElement('div');p.className='particle';p.textContent=chars[Math.floor(Math.random()*chars.length)];p.style.left=Math.random()*100+'vw';p.style.animationDuration=(7+Math.random()*16)+'s';p.style.animationDelay=(-Math.random()*16)+'s';p.style.fontSize=(0.5+Math.random()*0.9)+'rem';p.style.color=color;c.appendChild(p);}
 }
